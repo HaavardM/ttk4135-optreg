@@ -25,7 +25,7 @@ J_t = 2 * m_h * l_a *l_a;         % Moment of interia for travel
 
 % Identified voltage sum and difference
 V_s_eq = 6.4; % Identified equilibrium voltage sum.
-V_d_eq = 0.7; % Identified equilibrium voltage difference.
+V_d_eq = 0.5; % Identified equilibrium voltage difference.
 
 % Model parameters
 K_p = m_g*9.81; % Force to lift the helicopter from the ground.
