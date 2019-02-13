@@ -1,6 +1,6 @@
 % TTK4135 - Helicopter lab
 % Hints/template for problem 2.
-% Updated spring 2018, Andreas L. Flåten
+% Updated spring 2018, Andreas L. Flï¿½ten
 
 %% Initialization and model definition
 init; % Change this to the init file corresponding to your helicopter
