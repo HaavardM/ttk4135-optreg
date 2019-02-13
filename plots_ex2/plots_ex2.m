@@ -1,5 +1,5 @@
 %Getting data from file
-filename = '../data_ex2/ex2q01.mat';
+filename = '../data_ex2/ex2q1.mat';
 m = matfile(filename);
 data = m.ans;
 
