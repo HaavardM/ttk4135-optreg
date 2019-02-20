@@ -148,3 +148,14 @@ ylabel('e_{dot}')
 opt_x = [t', x1, x2, x3, x4, x5, x6];
 opt_u = [t', u1, u2];
 
+%% LQR
+
+Q_lqr = diag([1 0 0 0 1 0]); %State weight
+R_lqr = diag([1 1]);         %Input weight
+
+%Calculate discret LQR
+[K,S,E] = dlqr(A1,B1,Q_lqr,R_lqr); 
+
+
+
+

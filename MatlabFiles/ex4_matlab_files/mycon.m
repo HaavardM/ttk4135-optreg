@@ -1,8 +1,12 @@
-function [c, ceq] = mycon(X)
-    global alpha beta lambda_t N
+function [c, ceq] = mycon(z)
+    global N mx
+    beta = 20;
+    lamda_t = 2*pi/3;
+    alpha = 0.2;
+
     ceq = [];
     c = zeros(N, 1);
-    for index = 0:N-1
-        c(index+1) = alpha*exp(beta*(X(index*6+1) - lambda_t)^2)-X(index*6+5);
+    for k = 0:N-1
+        c(k+1) = alpha*exp(-beta*(z(k*mx+1) - lamda_t)^2)-z(k*mx+5);
     end
 end

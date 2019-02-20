@@ -95,11 +95,9 @@ x4  = [zero_padding; x4; zero_padding];
 t = 0:delta_t:delta_t*(length(u)-1);
 
 figure(2)
-
 subplot(511)
 stairs(t,u),grid
 ylabel('u')
-title(sprintf('Optimal travel path with output weight q = %.2f', P1));
 subplot(512)
 plot(t,x1,'m',t,x1,'mo'),grid
 ylabel('lambda')
@@ -112,6 +110,4 @@ ylabel('p')
 subplot(515)
 plot(t,x4,'m',t,x4','mo'),grid
 xlabel('tid (s)'),ylabel('pdot')
-opt_x = [t, x1, x2, x3, x4);
-opt_u = [u;
-close;
+input = timeseries(u', t);
