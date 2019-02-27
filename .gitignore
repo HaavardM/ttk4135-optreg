@@ -1,3 +1,8 @@
-helicopter_quark_win64/
+helicopter_quarc_win64/
+helicopter_feedback_quarc_win64/
+helicopter_without_feedback_quarc_win64/
 slprj/
 *.rt-win64
+*.asv
+*.original
+*.autosave

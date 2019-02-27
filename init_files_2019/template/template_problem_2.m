@@ -51,7 +51,7 @@ Q1(1,1) = 1;                            % Weight on state x1
 Q1(2,2) = 0;                            % Weight on state x2
 Q1(3,3) = 0;                            % Weight on state x3
 Q1(4,4) = 0;                            % Weight on state x4
-P1 = 0.1;                                % Weight on input
+P1 = 10;                                % Weight on input
 Q = gen_q(Q1, P1, N, M);                                  % Generate Q, hint: gen_q
 c = zeros(N*5, 1);                                  % Generate c, this is the linear constant term in the QP
 
@@ -95,11 +95,9 @@ x4  = [zero_padding; x4; zero_padding];
 t = 0:delta_t:delta_t*(length(u)-1);
 
 figure(2)
-
 subplot(511)
 stairs(t,u),grid
 ylabel('u')
-title(sprintf('Optimal travel path with output weight q = %.2f', P1));
 subplot(512)
 plot(t,x1,'m',t,x1,'mo'),grid
 ylabel('lambda')
@@ -112,8 +110,4 @@ ylabel('p')
 subplot(515)
 plot(t,x4,'m',t,x4','mo'),grid
 xlabel('tid (s)'),ylabel('pdot')
-
-
-opt_x = [t', x1, x2, x3, x4];
-opt_u = [t', u];
-close;
+input = timeseries(u', t);

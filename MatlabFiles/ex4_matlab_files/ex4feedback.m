@@ -105,7 +105,7 @@ unit_padding  = ones(num_variables,1);
 
 u1  = [zero_padding; u1; zero_padding];
 u2  = [zero_padding; u2; zero_padding];
-x1  = [pi*unit_padding; x1; zero_padding];
+x1  = [x0(1)*unit_padding; x1; zero_padding];
 x2  = [zero_padding; x2; zero_padding];
 x3  = [zero_padding; x3; zero_padding];
 x4  = [zero_padding; x4; zero_padding];
@@ -147,4 +147,15 @@ ylabel('e_{dot}')
 
 opt_x = [t', x1, x2, x3, x4, x5, x6];
 opt_u = [t', u1, u2];
+
+%% LQR
+
+Q_lqr = diag([1 0 0 0 1 0]); %State weight
+R_lqr = diag([1 1]);         %Input weight
+
+%Calculate discret LQR
+[K,S,E] = dlqr(A1,B1,Q_lqr,R_lqr); 
+
+
+
 

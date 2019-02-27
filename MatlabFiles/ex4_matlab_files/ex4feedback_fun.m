@@ -22,7 +22,7 @@ mx = size(A1,2); % Number of states (number of columns in A)
 mu = size(B1,2); % Number of inputs(number of columns in B)
 
 %% Initial values
-x1_0 = pi;                               % Lambda
+x1_0 = 0;                               % Lambda
 x2_0 = 0;                               % r
 x3_0 = 0;                               % p
 x4_0 = 0;                               % p_dot
@@ -31,7 +31,7 @@ x6_0 = 0;                               % e_dot
 x0 = [x1_0 x2_0 x3_0 x4_0 x5_0 x6_0]';           % Initial values
 
 %% Time horizon and initialization
-N  = 40;                                % Time horizon for states
+N  = 60;                                % Time horizon for states
 M  = N;                                 % Time horizon for inputs
 z  = zeros(N*mx+M*mu,1);                % Initialize z for the whole horizon
 z0 = z;                                 % Initial value for optimization
@@ -50,8 +50,6 @@ xu(3)   = uu(1);                           % Upper bound on state x3
 
 % Generate constraints on measurements and inputs
 [vlb,vub]       = gen_constraints(N, M, xl, xu, ul, uu); % hint: gen_constraints
-vlb(N*mx+M*mu-1: end)  = [0 0]';               % We want the last input to be zero
-vub(N*mx+M*mu-1: end)  = [0 0]';               % We want the last input to be zero
 
 % Generate the matrix Q and the vector c (objecitve function weights in the QP problem) 
 Q1 = zeros(mx,mx);
@@ -81,11 +79,11 @@ beq(1:mx) = A1*x0;
 F_cost = @(z) (1/2) * z' * Q * z;
 
 %% Solve QP problem with linear model
-tic
+
 %%[z,lambda] = quadprog(Q, c, [], [], Aeq, beq, vlb, vub, x0); % hint: quadprog. Type 'doc quadprog' for more info 
 opt = optimoptions('fmincon', 'Algorithm', 'sqp', 'MaxFunEvals', 400000);
-Z = fmincon(F_cost, z0, [], [], Aeq, beq, vlb, vub, @mycon, opt);
-t1=toc;
+Z = fmincon(F_cost, z0, [], [], Aeq, beq, vlb, vub, @myfuncon, opt);
+
 
 %% Extract control inputs and states
 u1  = [Z(N*mx+1:mu:N*mx+M*mu);Z(N*mx+M*mu-1)]; % Control input from solution
@@ -105,7 +103,7 @@ unit_padding  = ones(num_variables,1);
 
 u1  = [zero_padding; u1; zero_padding];
 u2  = [zero_padding; u2; zero_padding];
-x1  = [pi*unit_padding; x1; zero_padding];
+x1  = [x0(1)*unit_padding; x1; zero_padding];
 x2  = [zero_padding; x2; zero_padding];
 x3  = [zero_padding; x3; zero_padding];
 x4  = [zero_padding; x4; zero_padding];
@@ -147,4 +145,15 @@ ylabel('e_{dot}')
 
 opt_x = [t', x1, x2, x3, x4, x5, x6];
 opt_u = [t', u1, u2];
+
+%% LQR
+
+Q_lqr = diag([1 0 0 0 1 0]); %State weight
+R_lqr = diag([1 1]);         %Input weight
+
+%Calculate discret LQR
+[K,S,E] = dlqr(A1,B1,Q_lqr,R_lqr); 
+
+
+
 
