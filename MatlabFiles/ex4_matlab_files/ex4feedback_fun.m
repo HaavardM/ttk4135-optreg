@@ -22,16 +22,16 @@ mx = size(A1,2); % Number of states (number of columns in A)
 mu = size(B1,2); % Number of inputs(number of columns in B)
 
 %% Initial values
-x1_0 = 0;                               % Lambda
+x1_0 = pi;                               % Lambda
 x2_0 = 0;                               % r
 x3_0 = 0;                               % p
 x4_0 = 0;                               % p_dot
 x5_0 = 0;                               % e
 x6_0 = 0;                               % e_dot
-x0 = [x1_0 x2_0 x3_0 x4_0 x5_0 x6_0]';           % Initial values
+x0 = [x1_0 x2_0 x3_0 x4_0 x5_0 x6_0]';  % Initial values
 
 %% Time horizon and initialization
-N  = 60;                                % Time horizon for states
+N  = 40;                                % Time horizon for states
 M  = N;                                 % Time horizon for inputs
 z  = zeros(N*mx+M*mu,1);                % Initialize z for the whole horizon
 z0 = z;                                 % Initial value for optimization
@@ -49,7 +49,7 @@ xl(3)   = ul(1);                           % Lower bound on state x3
 xu(3)   = uu(1);                           % Upper bound on state x3
 
 % Generate constraints on measurements and inputs
-[vlb,vub]       = gen_constraints(N, M, xl, xu, ul, uu); % hint: gen_constraints
+[vlb,vub] = gen_constraints(N, M, xl, xu, ul, uu);
 
 % Generate the matrix Q and the vector c (objecitve function weights in the QP problem) 
 Q1 = zeros(mx,mx);
@@ -60,27 +60,21 @@ Q1(4,4) = 0;                            % Weight on state x4
 Q1(5,5) = 0;                            % Weight on state x5
 Q1(6,6) = 0;                            % Weight on state x6
 P = zeros(mu,mu);
-P1 = 0.1;
-P2 = 0.1;
+q_1 = 1;
+q_2 = 1;
+P1 = q_1*2;
+P2 = q_2*2;
 P(1,1) = P1;                            % Weight on pitch input
 P(2,2) = P2;                            % Weight on elevation input
 Q = gen_q(Q1, P, N, M);                                  % Generate Q, hint: gen_q
 
-beta = 20;
-lamda_t = 2*pi/3;
-alpha = 0.2;
-
-
 %% Generate system matrixes for linear model
 Aeq = gen_aeq(A1,B1,N,mx,mu);             % Generate A, hint: gen_aeq
-beq = zeros(size(Aeq, 1), 1);% Generate b
+beq = zeros(size(Aeq, 1), 1);             % Generate b
 beq(1:mx) = A1*x0;
 
+%% Solve QP problem with linear model and nonlinear constraint
 F_cost = @(z) (1/2) * z' * Q * z;
-
-%% Solve QP problem with linear model
-
-%%[z,lambda] = quadprog(Q, c, [], [], Aeq, beq, vlb, vub, x0); % hint: quadprog. Type 'doc quadprog' for more info 
 opt = optimoptions('fmincon', 'Algorithm', 'sqp', 'MaxFunEvals', 400000);
 Z = fmincon(F_cost, z0, [], [], Aeq, beq, vlb, vub, @myfuncon, opt);
 
@@ -93,10 +87,10 @@ x1 = [x0(1);Z(1:mx:N*mx)];              % State x1 from solution
 x2 = [x0(2);Z(2:mx:N*mx)];              % State x2 from solution
 x3 = [x0(3);Z(3:mx:N*mx)];              % State x3 from solution
 x4 = [x0(4);Z(4:mx:N*mx)];              % State x4 from solution
-x5 = [x0(5);Z(5:mx:N*mx)];
-x6 = [x0(6);Z(6:mx:N*mx)];
+x5 = [x0(5);Z(5:mx:N*mx)];              % State x5 from solution
+x6 = [x0(6);Z(6:mx:N*mx)];              % State x6 from solution
 
-
+%%Padding: adding zeros before and after states and input
 num_variables = 5/delta_t;
 zero_padding = zeros(num_variables,1);
 unit_padding  = ones(num_variables,1);
@@ -109,11 +103,10 @@ x3  = [zero_padding; x3; zero_padding];
 x4  = [zero_padding; x4; zero_padding];
 x5  = [zero_padding; x5; zero_padding];
 x6  = [zero_padding; x6; zero_padding];
+
 %% Plotting
 t = 0:delta_t:delta_t*(length(u1)-1);
-
 figure(2)
-
 subplot(511)
 stairs(t,u1),grid
 ylabel('u1')
@@ -148,8 +141,8 @@ opt_u = [t', u1, u2];
 
 %% LQR
 
-Q_lqr = diag([1 0 0 0 1 0]); %State weight
-R_lqr = diag([1 1]);         %Input weight
+Q_lqr = diag([1 0 0 0 0 0]); %State weight
+R_lqr = diag([.1 .1]);         %Input weight
 
 %Calculate discret LQR
 [K,S,E] = dlqr(A1,B1,Q_lqr,R_lqr); 

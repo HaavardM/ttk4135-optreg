@@ -3,7 +3,6 @@ function [c, ceq] = mycon(z)
     beta = 20;
     lamda_t = 2*pi/3;
     alpha = 0.2;
-
     ceq = [];
     c = zeros(N, 1);
     for k = 0:N-1

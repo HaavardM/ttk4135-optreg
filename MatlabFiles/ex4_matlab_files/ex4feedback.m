@@ -150,7 +150,7 @@ opt_u = [t', u1, u2];
 
 %% LQR
 
-Q_lqr = diag([1 0 0 0 1 0]); %State weight
+Q_lqr = diag([1 0 1 0 1 0]); %State weight
 R_lqr = diag([1 1]);         %Input weight
 
 %Calculate discret LQR
