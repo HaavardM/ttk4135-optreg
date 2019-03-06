@@ -31,10 +31,11 @@ x6_0 = 0;                               % e_dot
 x0 = [x1_0 x2_0 x3_0 x4_0 x5_0 x6_0]';           % Initial values
 
 %% Time horizon and initialization
-N  = 40;                                % Time horizon for states
+N  = 60;                                % Time horizon for states
 M  = N;                                 % Time horizon for inputs
 z  = zeros(N*mx+M*mu,1);                % Initialize z for the whole horizon
-z0 = z;                                 % Initial value for optimization
+z0 = z;% Initial value for optimization
+z0(1) = pi;
 
 %% Bounds
 u1l 	= -pi/6;                         % Lower bound on control
@@ -62,11 +63,11 @@ Q1(4,4) = 0;                            % Weight on state x4
 Q1(5,5) = 0;                            % Weight on state x5
 Q1(6,6) = 0;                            % Weight on state x6
 P = zeros(mu,mu);
-P1 = 0.1;
-P2 = 0.1;
-P(1,1) = P1;                            % Weight on pitch input
-P(2,2) = P2;                            % Weight on elevation input
-Q = gen_q(Q1, P, N, M);                                  % Generate Q, hint: gen_q
+q_1 = 10;
+q_2 = 5;
+P(1,1) = q_1;                            % Weight on pitch input
+P(2,2) = q_2;                            % Weight on elevation input
+Q = gen_q(Q1, P, N, M);             % Generate Q, hint: gen_q                     % Generate Q, hint: gen_q
 
 beta = 20;
 lamda_t = 2*pi/3;
@@ -78,7 +79,7 @@ Aeq = gen_aeq(A1,B1,N,mx,mu);             % Generate A, hint: gen_aeq
 beq = zeros(size(Aeq, 1), 1);% Generate b
 beq(1:mx) = A1*x0;
 
-F_cost = @(z) (1/2) * z' * Q * z;
+F_cost = @(z) z' * Q * z;
 
 %% Solve QP problem with linear model
 tic
@@ -119,7 +120,7 @@ figure(2)
 subplot(511)
 stairs(t,u1),grid
 ylabel('u1')
-title(sprintf('Optimal travel path with output weight q = %.2f', P1));
+title(sprintf('Optimal travel path with output weight q = %.2f', q_1));
 subplot(512)
 plot(t,x1,'m',t,x1,'mo'),grid
 ylabel('lambda')
@@ -137,7 +138,7 @@ figure(3)
 subplot(311)
 stairs(t,u2),grid
 ylabel('u2')
-title(sprintf('Optimal travel path with output weight q = %.2f', P1));
+title(sprintf('Optimal travel path with output weight q = %.2f', q_1));
 subplot(312)
 plot(t,x5,'m',t,x5,'mo'),grid
 ylabel('e')
@@ -150,8 +151,8 @@ opt_u = [t', u1, u2];
 
 %% LQR
 
-Q_lqr = diag([1 0 1 0 1 0]); %State weight
-R_lqr = diag([1 1]);         %Input weight
+Q_lqr = diag([80 40 10 5 10 1]); %State weight
+R_lqr = diag([0.1 0.5]);         %Input weight
 
 %Calculate discret LQR
 [K,S,E] = dlqr(A1,B1,Q_lqr,R_lqr); 

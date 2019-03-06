@@ -35,7 +35,7 @@ N  = 60;                                % Time horizon for states
 M  = N;                                 % Time horizon for inputs
 z  = zeros(N*mx+M*mu,1);                % Initialize z for the whole horizon
 z0 = z;                                 % Initial value for optimization
-
+z0(1) = pi;
 %% Bounds
 u1l 	= -pi/6;                         % Lower bound on control
 u1u 	= pi/6;                         % Upper bound on control
@@ -62,13 +62,11 @@ Q1(4,4) = 0;                            % Weight on state x4
 Q1(5,5) = 0;                            % Weight on state x5
 Q1(6,6) = 0;                            % Weight on state x6
 P = zeros(mu,mu);
-q_1 = 0.1;
+q_1 = 10;
 q_2 = 0.1;
-P1 = q_1*2;
-P2 = q_2*2;
-P(1,1) = P1;                            % Weight on pitch input
-P(2,2) = P2;                            % Weight on elevation input
-Q = gen_q(Q1, P, N, M);                                  % Generate Q, hint: gen_q
+P(1,1) = q_1;                            % Weight on pitch input
+P(2,2) = q_2;                            % Weight on elevation input
+Q = gen_q(Q1, P, N, M);             % Generate Q, hint: gen_q
 
 %% Generate system matrixes for linear model
 Aeq = gen_aeq(A1,B1,N,mx,mu);               % Generate A
@@ -76,7 +74,7 @@ beq = zeros(size(Aeq, 1), 1);               % Generate b
 beq(1:mx) = A1*x0;
 
 %% Solve QP problem with linear modelbeta = 20;
-F_cost = @(z) (1/2) * z' * Q * z;
+F_cost = @(z) z' * (Q) * z;
 tic;
 opt = optimoptions('fmincon', 'Algorithm', 'sqp', 'MaxFunEvals', 400000);
 Z = fmincon(F_cost, z0, [], [], Aeq, beq, vlb, vub, @mycon, opt);
@@ -114,7 +112,7 @@ figure(2)
 subplot(511)
 stairs(t,u1),grid
 ylabel('u1')
-title(sprintf('Optimal travel path with output weight q = %.2f', P1));
+title(sprintf('Optimal travel path with output weight q = %.2f', q_1));
 subplot(512)
 plot(t,x1,'m',t,x1,'mo'),grid
 ylabel('lambda')

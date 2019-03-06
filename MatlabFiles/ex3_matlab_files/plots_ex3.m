@@ -1,12 +1,14 @@
 %Getting data from file
-filename = 'ex3_q_10.mat';
-m = matfile(filename);
-data = m.ans;
+
 
 %Running optimal path script
 addpath('../ex2_matlab_files');
 run ex_2;
 close;
+
+filename = 'ex3_q_01.mat';
+m = matfile(filename);
+data = m.ans;
 
 %Data from encoders
 time = data(1,:);

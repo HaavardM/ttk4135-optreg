@@ -62,7 +62,7 @@ beq(1:mx) = A1*x0;
 
 %% Solve QP problem with linear model
 tic
-[z,lambda] = quadprog(Q, c, [], [], Aeq, beq, vlb, vub, x0); % hint: quadprog. Type 'doc quadprog' for more info 
+[z,lambda] = quadprog(2*Q, c, [], [], Aeq, beq, vlb, vub, x0); % hint: quadprog. Type 'doc quadprog' for more info 
 t1=toc;
 
 % Calculate objective value

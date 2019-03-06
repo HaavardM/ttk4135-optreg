@@ -1,5 +1,5 @@
 %Getting data from file
-filename = '../data_ex2/ex2q01.mat';
+filename = '../data_ex4/ex2q1.mat';
 m = matfile(filename);
 data = m.ans;
 
@@ -37,7 +37,7 @@ stairs(opt_time, opt_travel);
 axis([0,20, -40, 240]);
 legend('Measured travel angle','Optimal travel angle');
 xlabel('Time t [s]');
-ylabel('Travel angle [Â°]');
+ylabel('Travel angle [°]');
 
 subplot(2,1,2);
 plot(time, encoder_travel_rate, 'r');
@@ -48,7 +48,7 @@ axis([0, 20, -60, 30]);
 l = legend('Measured travel rate','Optimal travel rate');
 l.Location = 'southeast';
 xlabel('Time t [s]');
-ylabel('Travel rate [Â°/s]');
+ylabel('Travel rate [°/s]');
 print -depsc ex2_travel_q01
 
 %Plotting the pitch and pitch rate
@@ -58,10 +58,10 @@ plot(time, encoder_pitch, 'r');
 title('Optimal pitch path vs measured pitch path');
 hold;
 stairs(opt_time, opt_pitch);
-axis([0,20, -30, 50]);
+axis([0,20, -40, 40]);
 legend('Measured pitch angle','Optimal pitch angle');
 xlabel('Time t [s]');
-ylabel('Pitch angle [Â°]');
+ylabel('Pitch angle [°]');
 
 subplot(2,1,2);
 plot(time, encoder_pitch_rate, 'r');
@@ -72,7 +72,7 @@ axis([0, 20, -60, 50]);
 l = legend('Measured pitch rate','Optimal pitch rate');
 l.Location = 'southeast';
 xlabel('Time t [s]');
-ylabel('Pitch rate [Â°/s]');
+ylabel('Pitch rate [°/s]');
 
 %Plotting the input u = p_c (optimal input pitch)
 %versus the measured pitch angle
@@ -81,7 +81,7 @@ plot(time, encoder_pitch, 'r');
 title('Optimal input u = p_{c} vs measured pitch path');
 hold;
 stairs(opt_input_time, opt_input);
-axis([0,20, -25, 35]);
+axis([0,20, -40, 40]);
 legend('Measured pitch angle','Optimal input angle u');
 xlabel('Time t [s]');
-ylabel('Pitch angle [Â°]');
+ylabel('Pitch angle [°]');
