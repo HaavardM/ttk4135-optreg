@@ -1,6 +1,6 @@
 % TTK4135 - Helicopter lab
 % Hints/template for problem 2.
-% Updated spring 2018, Andreas L. Flåten
+% Updated spring 2018, Andreas L. Flï¿½ten
 
 %% Initialization and model definition
 init; % Change this to the init file corresponding to your helicopter
@@ -51,7 +51,7 @@ Q1(1,1) = 1;                            % Weight on state x1
 Q1(2,2) = 0;                            % Weight on state x2
 Q1(3,3) = 0;                            % Weight on state x3
 Q1(4,4) = 0;                            % Weight on state x4
-P1 = 0.1;                                % Weight on input
+P1 = 10;                                % Weight on input
 Q = gen_q(Q1, P1, N, M);                                  % Generate Q, hint: gen_q
 c = zeros(N*5, 1);                                  % Generate c, this is the linear constant term in the QP
 
