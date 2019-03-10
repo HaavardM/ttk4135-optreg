@@ -1,6 +1,6 @@
 % TTK4135 - Helicopter lab
 % Hints/template for problem 2.
-% Updated spring 2018, Andreas L. Flåten
+% Updated spring 2018, Andreas L. Flï¿½ten
 
 %% Initialization and model definition
 init; % Change this to the init file corresponding to your helicopter
@@ -134,6 +134,7 @@ ylabel('e')
 subplot(313)
 plot(t,x6,'m',t,x6,'mo'),grid
 ylabel('e_{dot}')
+close;
 
 opt_x = [t', x1, x2, x3, x4, x5, x6];
 opt_u = [t', u1, u2];

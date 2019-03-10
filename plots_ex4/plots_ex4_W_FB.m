@@ -1,10 +1,10 @@
 %Running optimal trajectory script
 addpath('../MatlabFiles/ex4_matlab_files');
-run ex4;
+run ex4feedback;
 close;
 
 %Getting data from file
-filename = '../data_ex4/ex4_q_10_wo_feedback.mat';
+filename = '../data_ex4/ex4_q_10_w_feedback.mat';
 m = matfile(filename);
 data = m.ans;
 

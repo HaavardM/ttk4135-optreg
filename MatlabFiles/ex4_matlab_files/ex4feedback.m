@@ -1,6 +1,6 @@
 % TTK4135 - Helicopter lab
 % Hints/template for problem 2.
-% Updated spring 2018, Andreas L. Flåten
+% Updated spring 2018, Andreas L. Flï¿½ten
 
 %% Initialization and model definition
 init; % Change this to the init file corresponding to your helicopter
@@ -64,7 +64,7 @@ Q1(5,5) = 0;                            % Weight on state x5
 Q1(6,6) = 0;                            % Weight on state x6
 P = zeros(mu,mu);
 q_1 = 10;
-q_2 = 5;
+q_2 = 10;
 P(1,1) = q_1;                            % Weight on pitch input
 P(2,2) = q_2;                            % Weight on elevation input
 Q = gen_q(Q1, P, N, M);             % Generate Q, hint: gen_q                     % Generate Q, hint: gen_q
@@ -145,6 +145,7 @@ ylabel('e')
 subplot(313)
 plot(t,x6,'m',t,x6,'mo'),grid
 ylabel('e_{dot}')
+close;
 
 opt_x = [t', x1, x2, x3, x4, x5, x6];
 opt_u = [t', u1, u2];
